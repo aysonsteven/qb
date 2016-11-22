@@ -1,0 +1,15 @@
+page-questionform {
+    [progress] {
+        background-color: blue;
+        color:white;
+    }
+    [error] {
+        background-color: red;
+        color: white;
+    }
+    [success] {
+        background-color: green;
+        color: white;
+    }
+
+}

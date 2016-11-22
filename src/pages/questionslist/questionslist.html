@@ -1,0 +1,48 @@
+<!--
+  Generated template for the Questionslist page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>questionslist</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  
+
+  <ion-list>
+    <ion-item  *ngFor="let question of questions; let i = index" >
+      
+      <ion-item  *ngIf="! more[i]">
+        {{ question.title }}
+        <br/>
+        <button  (click)='more[i] = ! more[i]'>Show more</button>
+        <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+        <button (click)="onClickDelete(question.idx, i)">Delete</button>
+      </ion-item>
+        
+      <ion-item text-wrap *ngIf="more[i]">   
+        {{ question.title }}
+        <br/>
+        <button (click)='more[i] = ! more[i]'>Show less</button>
+        <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+        <button (click)="onClickDelete(question.idx, i)">Delete</button>
+      </ion-item>
+      
+      <!--<ion-item-options >
+        <button ion-button color="secondary" (click)="onClickUpdate(question.idx, i)"> Edit</button>
+        <button ion-button color="danger" (click)="onClickDelete(question.idx, i)">Delete</button>
+      </ion-item-options>-->
+     
+    </ion-item>
+  </ion-list>
+
+  <button ion-button (click)="onClickBack()">Back</button>
+
+</ion-content>
