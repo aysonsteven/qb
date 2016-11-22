@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http'
 import { HomePage } from '../home/home';
-<<<<<<< HEAD
-=======
+
 import * as config from '../shared/shared.config.ts';
->>>>>>> 552a2c68cdb53416857d81ceabd5f31372f32db8
+
 
 interface userMeta {
   id:string;
