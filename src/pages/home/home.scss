@@ -2,6 +2,7 @@ page-home {
   ion-card {
     position: relative;
     text-align: center;
+    border: 0px;
   }
   ion-row {
     height: 100%;
@@ -35,6 +36,6 @@ page-home {
     position: absolute;
     top: 80%;
     width: 100%;
-    color: silver;
+    color: grey;
   }
 }
