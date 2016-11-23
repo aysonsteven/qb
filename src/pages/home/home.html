@@ -14,12 +14,39 @@
 
 
 <ion-content padding>
-  
-  <button ion-button (click)="goToQuestionForm()">Add question</button>
-  <button ion-button (click)="goToQuestionList()">QuestionsList</button>
 
+    <ion-list>
+      <ion-card class="card-background-page">
+        <img src="assets/img/header.png" />
+        <div class="card-title">Quiz Builder</div>
+        <div class="card-subtitle">Control Panel</div>
+      </ion-card>
 
+      <ion-row wrap>
+        <ion-col width-35>
+          <ion-card no-margin class="list-menu" (click)="goToQuestionForm()">
+            <ion-card-header>
+              <ion-icon name="create"></ion-icon>
+            </ion-card-header>
+            <ion-card-content>
+              Add question
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col width-35>
+          <ion-card no-margin class="list-menu" (click)="goToQuestionList()">
+            <ion-card-header>
+              <ion-icon name="list-box"></ion-icon>
+            </ion-card-header>
+            <ion-card-content>
+              Questions List
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+    </ion-list>
   <br>
   <br>
-
 </ion-content>

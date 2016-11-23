@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http'
 import { HomePage } from '../home/home';
 
-import * as config from '../shared/shared.config.ts';
+
 
 
 interface userMeta {

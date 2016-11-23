@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>questionform</ion-title>
+    <ion-title><span *ngIf="! idx">Create New Question</span> <span *ngIf="idx">Update Question</span></ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -29,7 +29,6 @@
 <div [ngSwitch]="category">
   <div *ngSwitchCase="'grammar'">
 
-      <ion-list>
       <ion-item>
         <ion-label stacked>Question</ion-label>
         <ion-textarea [(ngModel)]="grammarPost.question"></ion-textarea>
@@ -64,7 +63,7 @@
             <ion-option value=4>{{ grammarPost.choice4 }}</ion-option>
         </ion-select>
       </ion-item>
-    </ion-list>
+
     <div progress *ngIf=" errorChk?.progress "><ion-spinner></ion-spinner>{{ errorChk.progress }}</div>
     <div success *ngIf=" errorChk?.success "><ion-icon name="checkmark"></ion-icon>{{ errorChk.success }}</div>
     <div error *ngIf=" errorChk?.error "><ion-icon name="bug"></ion-icon>{{ errorChk.error }}</div>
@@ -115,7 +114,7 @@
 
     <ion-list>
       <ion-item>
-        <ion-label stacked>Description</ion-label>
+        <ion-label fixed>Description</ion-label>
         <ion-textarea [(ngModel)]='photo.description'></ion-textarea>
       </ion-item>
       <ion-item>
@@ -134,6 +133,8 @@
         </div>
     </ion-list>
   </div>
+
+  <br/>
   
     <button  ion-button (click)='onClickCreateQuestion()'>Submit</button>
     <button ion-button (click)="onClickBack()">Back</button>
