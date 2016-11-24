@@ -17,14 +17,10 @@ import * as config from '../shared/shared.config.ts';
 })
 
 export class QuestionslistPage {
+
+  loading:boolean = false;
   category:string = 'grammar';
-  opt={
-      'mc' : 'post.search',
-      'options': {
-        'cond' : "extra_1 = '" + this.category +"'",
-        'orderby':'idx DESC'
-      }
-  };
+  opt={};
 
   pic:string;
 
@@ -35,6 +31,7 @@ export class QuestionslistPage {
   questions = [];
   constructor(private navCtrl: NavController, private http: Http, private tstCtrl: ToastController) {
     console.log('checkConfig:: ' + config.serverURL)
+    this.loading = true;
     this.getQuestionList();
   }
 
@@ -42,14 +39,24 @@ export class QuestionslistPage {
     console.log('Hello QuestionslistPage Page');
   }
   testChange(){
-
+    this.questions = [];
+    this.loading = true;
     console.log(this.category);
+    this.getQuestionList();
   }
 
   getQuestionList(){
+    this.opt={
+      'mc' : 'post.search',
+      'options': {
+        'cond' : "extra_1 = '" + this.category +"'",
+        'orderby':'idx DESC'
+      }
+  };
     this.http.post( this.url , this.http_build_query(this.opt), this.options ).subscribe(res=>{
       this.questions = JSON.parse(res['_body']).data.rows
       console.log( JSON.parse(res['_body']).data.rows )
+      this.loading = false;
     }, e=>{})
   }
 
