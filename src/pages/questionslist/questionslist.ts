@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { QuestionformPage } from '../questionform/questionform'
 import { HomePage } from '../home/home';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import * as config from '../shared/shared.config.ts';
 
 /*
@@ -17,11 +17,20 @@ import * as config from '../shared/shared.config.ts';
 })
 
 export class QuestionslistPage {
+  category:string = 'grammar';
+  opt={
+      'mc' : 'post.search',
+      'options': {
+        'cond' : "extra_1 = '" + this.category +"'",
+        'orderby':'idx DESC'
+      }
+  };
 
   pic:string;
 
   more = [];
-  
+  headers = new Headers ({'Content-Type':'application/x-www-form-urlencoded'})
+  options = new RequestOptions({headers : this.headers});
   url:string = 'http://xbase.esy.es/';
   questions = [];
   constructor(private navCtrl: NavController, private http: Http, private tstCtrl: ToastController) {
@@ -34,11 +43,73 @@ export class QuestionslistPage {
   }
 
   getQuestionList(){
-    this.http.request( this.url + '?mc=post.search' ).subscribe(res=>{
+    this.http.post( this.url , this.http_build_query(this.opt), this.options ).subscribe(res=>{
       this.questions = JSON.parse(res['_body']).data.rows
       console.log( JSON.parse(res['_body']).data.rows )
     }, e=>{})
   }
+
+
+  http_build_query (formdata, numericPrefix='', argSeparator='') { 
+        var urlencode = this.urlencode;
+        var value
+        var key
+        var tmp = []
+        var _httpBuildQueryHelper = function (key, val, argSeparator) {
+            var k
+            var tmp = []
+            if (val === true) {
+            val = '1'
+            } else if (val === false) {
+            val = '0'
+            }
+            if (val !== null) {
+            if (typeof val === 'object') {
+                for (k in val) {
+                if (val[k] !== null) {
+                    tmp.push(_httpBuildQueryHelper(key + '[' + k + ']', val[k], argSeparator))
+                }
+                }
+                return tmp.join(argSeparator)
+            } else if (typeof val !== 'function') {
+                return urlencode(key) + '=' + urlencode(val)
+            } else {
+                throw new Error('There was an error processing for http_build_query().')
+            }
+            } else {
+            return ''
+            }
+        }
+
+        if (!argSeparator) {
+            argSeparator = '&'
+        }
+        
+        for (key in formdata) {
+            value = formdata[key]
+            if (numericPrefix && !isNaN(key)) {
+            key = String(numericPrefix) + key
+            }
+            var query = _httpBuildQueryHelper(key, value, argSeparator)
+            if (query !== '') {
+            tmp.push(query)
+            }
+        }
+
+        return tmp.join(argSeparator)
+    }
+
+  urlencode (str) {
+    str = (str + '')
+    return encodeURIComponent(str)
+        .replace(/!/g, '%21')
+        .replace(/'/g, '%27')
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29')
+        .replace(/\*/g, '%2A')
+        .replace(/%20/g, '+')
+}
+
 
   moretest(x){
     console.log(x);

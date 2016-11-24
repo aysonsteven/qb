@@ -1,32 +1,20 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { Http } from '@angular/http'
-import { HomePage } from '../home/home';
+import { NavController, ToastController } from 'ionic-angular';
+import { ControlpanelPage } from '../controlpanel/controlpanel';
+import { User, USER_DATA } from "../../fireframe2/user";
 
-
-
-
-interface userMeta {
-  id:string;
-  idx:number;
-  email: string;
-  password?: string;
-  uid?: string;
+interface userMeta extends USER_DATA {
   displayName:string;
   age:string;
 }
 
-/*
-  Generated class for the Authentication page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-authentication',
   templateUrl: 'authentication.html'
 })
 export class AuthenticationPage {
+
+  errorChk;
 
   userData = <userMeta> {};
   regUserMail:string;
@@ -36,68 +24,111 @@ export class AuthenticationPage {
   loginUserPass:string;
 
   authentication: string = 'login';
-  errorChk;
-  users= [];
-  url:string = 'http://xbase.esy.es/';
 
-  constructor(private navCtrl: NavController, private http: Http) {
-    this.test();
-    this.navCtrl.setRoot( HomePage );
+  constructor(
+    public navCtrl: NavController,
+    private user: User,
+    private toastCtrl: ToastController
+  ) {
+    
   }
 
-  ionViewDidLoad() {
-    console.log('Hello AuthenticationPage Page');
+
+// observable
+//  checks anfularfire auth if user is logged in.
+  checkUser() {
+    this.user.loggedIn( ( userData ) => {
+      this.navCtrl.setRoot( ControlpanelPage );
+    }, e => console.error( e ) );
   }
-
-  test(){
-    this.http.request( this.url + '?mc=user.fetch').subscribe(res=>{
-      this.users = JSON.parse(res['_body']).data
-      console.log(this.users);
-    })
-  }
-  validateForm() {
-
-  if ( this.loginUserMail == '' || this.userData.email == null ) {
-    this.errorChk = { error: 'Input user email' };
-    return false;
-  }else if( this.loginUserPass == '' || this.userData.password == null ){
-    this.errorChk = { error: 'Input Password' }
-    return false;
-  }
-  return true;
-}
-
-
-  onClickLogin(){
-    this.errorChk = { progress: 'Login Progress ...' };
-    this.http.get( this.url + '?mc=user.login&id=' + this.loginUserMail + '&password='+ this.loginUserPass ).subscribe( res =>{
-      console.log('result' + res);
-      this.errorChk = { success: 'login success' }
-      this.navCtrl.setRoot( HomePage );
-    })
-  }
-  
-
-  onClickRegister(){
-  if ( this.validateForm() == false ) return;
-  this.errorChk = { progress: 'Registration on progress: please wait..' };
-  this.http.get( this.url + '?mc=user.register&id=' + this.userData.id + '&email=' + this.userData.email+ '&password='+ this.userData.password ).subscribe( re=>{
-    console.log('ok : ' + re )
-    this.onClickReset();
-    this.errorChk = { success: 'Registration success.' };
-  }, e=>{
-    console.log('error' + e)
-  })
-}
 
   onClickReset(){
-    this.userData.displayName = '';
-    this.userData.email = '';
-    this.userData.id = '';
-    this.userData.password = '';
+    if( this.authentication == 'login' ){
+      this.loginUserMail = undefined;
+      this.loginUserPass = undefined;
+      this.errorChk = {};
+      return
+    }
+    this.userData.email = undefined;
+    this.userData.password = undefined;
+    this.userData.displayName = undefined;
+    this.errorChk = {};
+  }
+  ionViewWillEnter(){
+    // this.checkUser();
+  }
+  ionViewDidLoad(){
+   
+  }
+  onClickLogin(){
+    if ( this.validateForm() == false ) return;
+    this.errorChk = { progress: 'Signing in .. ' };
+    this.user
+      .set( 'email', this.loginUserMail )
+      .set( 'password', this.loginUserPass )
+      .login( re => {
+        this.errorChk = { success: 'Sign in sucess: redirecting to controlpanel ..'}
+        this.navCtrl.setRoot( ControlpanelPage );
+        this.toastCtrl.create( { 
+          message:'sucess', 
+          duration: 2500,
+          showCloseButton: true,
+          closeButtonText: 'x',
+          position: 'top' 
+        } ).present();
+      }, e => {
+        this.errorChk = { error: e }
+        
+        this.toastCtrl.create({
+          message: e,
+          showCloseButton: true,
+          closeButtonText: 'x',
+          position: 'top',
+          duration: 2500
+        })
+        .present();
+      });
+  }
+  onClickRegister(){
+    if ( this.validateForm() == false ) return;
+    this.errorChk = { progress: 'Registration on progress: please wait..' };
+    this.user
+     .sets(this.userData)
+     .register(
+        ( ) => {this.alert( 'User registration success' )
+      this.errorChk = { success: 'Registration success' }
+      this.navCtrl.setRoot( ControlpanelPage );
+    },
+        (e) => {
+          
+          this.errorChk = { error: e }
+          this.toastCtrl.create( { message: e , duration: 1500 } ).present();
+      } );
+        
+  }
+  alert(e) {
+    this.errorChk = { error: e }
+    this.toastCtrl.create({ 
+      message: e, 
+      duration: 2500,
+      showCloseButton: true,
+      closeButtonText: 'x',
+      position: 'top' 
+    }).present();
   }
 
-  onClickForgotPass(){
+    validateForm() {
+    if ( this.loginUserMail == '' || this.userData.email =='' ) {
+      this.errorChk = { error: 'Input user email' };
+      return false;
+    }else if( this.loginUserPass == '' || this.userData.password == '' ){
+      this.errorChk = { error: 'Input Password' }
+      return false;
+    }
+    return true;
+  }
 
+  clearError(){
+    this.errorChk = {};
   }
 }

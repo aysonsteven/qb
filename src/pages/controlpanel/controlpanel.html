@@ -1,0 +1,63 @@
+<!--
+  Generated template for the Dashboard page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Control Panel</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-list>
+      <ion-card class="card-background-page">
+        <img src="assets/img/header.png" />
+        <div class="card-title">Quiz Builder</div>
+        <div class="card-subtitle"><span *ngIf='userName'>{{ userName }}</span></div>
+      </ion-card>
+
+      <ion-row wrap>
+        <ion-col width-35>
+          <ion-card no-margin class="list-menu" (click)="goToQuestionForm()">
+            <ion-card-header>
+              <ion-icon name="create"></ion-icon>
+            </ion-card-header>
+            <ion-card-content>
+              Add question
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col width-35 (click)="goToQuestionList()">
+          <ion-card no-margin class="list-menu" >
+            <ion-card-header>
+              <ion-icon name="list-box"></ion-icon>
+            </ion-card-header>
+            <ion-card-content>
+              Questions List
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+          <ion-card no-margin class="list-menu" (click)="onClickLogout()">
+            <ion-card-header>
+              <ion-icon name="list-box"></ion-icon>
+            </ion-card-header>
+            <ion-card-content>
+              Logout
+            </ion-card-content>
+          </ion-card>
+      </ion-row>
+
+    </ion-list>
+  <br>
+  <br>
+</ion-content>

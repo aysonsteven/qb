@@ -14,7 +14,16 @@
 
 
 <ion-content padding>
-  
+  <ion-list>
+    <ion-item>
+      <ion-label>Category</ion-label>
+      <ion-select [(ngModel)]="category">
+        <ion-option value="grammar">Grammar</ion-option>
+        <ion-option value="vocabulary">Vocabulary</ion-option>
+        <ion-option value="picture">Picture Description</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
   <ion-list>
     <ion-item  *ngFor="let question of questions; let i = index" >

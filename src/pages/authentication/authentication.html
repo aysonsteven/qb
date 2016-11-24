@@ -1,76 +1,26 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-segment [(ngModel)]="authentication">
-      <ion-segment-button value="login">
-        <h5>Login</h5>
-        
-      </ion-segment-button>
-      <ion-segment-button value="register" >
-        <h5>Register</h5>
-        
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
+  <ion-navbar>
+    <ion-title>Authentication</ion-title>
+  </ion-navbar>
 </ion-header>
 
+
+
 <ion-content padding>
-  <div [ngSwitch]="authentication" >
-    <div *ngSwitchCase="'login'">
-      <h3>Login</h3>
-      <ion-list>
+<h3>Login</h3>
+    <ion-list>
         <ion-item>
           <ion-label stacked>Email</ion-label>
-          <ion-input [(ngModel)]="loginUserMail"></ion-input>
+          <ion-input [(ngModel)]="loginUserMail" (focus)="clearError()"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>Password</ion-label>
           <ion-input [(ngModel)]="loginUserPass"></ion-input>
         </ion-item>
       </ion-list>
-      
-    </div>
-    <div *ngSwitchCase="'register'">
-      <h3>Register</h3>
-      <ion-list>
-        <ion-item>
-          <ion-label stacked>id</ion-label>
-          <ion-input [(ngModel)]="userData.idx"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>nickname</ion-label>
-          <ion-input [(ngModel)]="userData.id"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>Email</ion-label>
-          <ion-input [(ngModel)]="userData.email"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>Password</ion-label>
-          <ion-input [(ngModel)]="userData.password"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>Name</ion-label>
-          <ion-input [(ngModel)]="userData.displayName"></ion-input>
-        </ion-item>
-      </ion-list>
- 
-    </div>
   <div progress *ngIf=" errorChk?.progress "><ion-spinner></ion-spinner>{{ errorChk.progress }}</div>
   <div success *ngIf=" errorChk?.success "><ion-icon name="checkmark"></ion-icon>{{ errorChk.success }}</div>
   <div error *ngIf=" errorChk?.error "><ion-icon name="bug"></ion-icon>{{ errorChk.error }}</div>
+  <button ion-button small (click)="onClickLogin()">Login</button>
 
-  <button ion-button small (click)="onClickLogin()" *ngSwitchCase="'login'">Login</button>
-  <button ion-button small (click)="onClickRegister()" *ngSwitchCase="'register'">Register</button>
-  <button ion-button small (click)="onClickReset()">Reset</button>
-  <button ion-button small (click)="onClickForgotPass()">Forgot Password</button>
-  </div>
-
-
-  <!--<ion-list>
-    <ion-item *ngFor="let user of users">
-      {{ user.id }}
-    </ion-item>
-  </ion-list>-->
-
-  <!--<button (click)="onClickTest()">test</button>-->
 </ion-content>
