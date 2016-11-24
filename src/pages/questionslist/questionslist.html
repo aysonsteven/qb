@@ -14,43 +14,52 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-label>Category</ion-label>
-      <ion-select [(ngModel)]="category">
-        <ion-option value="grammar">Grammar</ion-option>
-        <ion-option value="vocabulary">Vocabulary</ion-option>
-        <ion-option value="picture">Picture Description</ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
+  <div padding>
+    <ion-segment [(ngModel)]="category">
+      <ion-segment-button>
+        All
+      </ion-segment-button>
+      <ion-segment-button value="grammar">
+        Grammar
+      </ion-segment-button>
+      <ion-segment-button value="vocabulary">
+        Vocabulary
+      </ion-segment-button>
+      <ion-segment-button value="picture">
+        Picture
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 
-  <ion-list>
-    <ion-item  *ngFor="let question of questions; let i = index" >
-      
-      <ion-item  *ngIf="! more[i]">
-        {{ question.title }}
-        <br/>
-        <button  (click)='more[i] = ! more[i]'>Show more</button>
-        <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
-        <button (click)="onClickDelete(question.idx, i)">Delete</button>
-      </ion-item>
+  <div [ngSwitch]="category">
+    <ion-list *ngSwitchCase="'grammar'">
+      <div *ngFor="let question of questions; let i = index" >
         
-      <ion-item text-wrap *ngIf="more[i]">   
-        {{ question.title }}
-        <br/>
-        <button (click)='more[i] = ! more[i]'>Show less</button>
-        <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
-        <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        <ion-item  *ngIf="! more[i]">
+          {{ question.title }}
+          <br/>
+          <button  (click)='more[i] = ! more[i]'>Show more</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+          
+        <ion-item text-wrap *ngIf="more[i]">   
+          {{ question.title }}
+          <div>Choice1: {{ question.extra_2}}</div>
+          <br/>
+          <button (click)='more[i] = ! more[i]'>Show less</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+        
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'vocabulary'">
+      <ion-item>
+        vocabulary
       </ion-item>
-      
-      <!--<ion-item-options >
-        <button ion-button color="secondary" (click)="onClickUpdate(question.idx, i)"> Edit</button>
-        <button ion-button color="danger" (click)="onClickDelete(question.idx, i)">Delete</button>
-      </ion-item-options>-->
-     
-    </ion-item>
-  </ion-list>
+    </ion-list>
+  </div>
 
   <button ion-button (click)="onClickBack()">Back</button>
 

@@ -41,6 +41,10 @@ export class QuestionslistPage {
   ionViewDidLoad() {
     console.log('Hello QuestionslistPage Page');
   }
+  testChange(){
+
+    console.log(this.category);
+  }
 
   getQuestionList(){
     this.http.post( this.url , this.http_build_query(this.opt), this.options ).subscribe(res=>{
@@ -132,7 +136,7 @@ export class QuestionslistPage {
   }
 
   onClickDelete(id, index){
-    this.http.request( this.url + '?mc=post.delete&idx=' + id).subscribe( s=>{
+    this.http.get( this.url + '?mc=post.delete&idx=' + id).subscribe( s=>{
       console.log('ok: ' + s);
       this.createToast('Successfully deleted', 2500);
       this.questions.splice(index, 1);
