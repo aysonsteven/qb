@@ -17,7 +17,7 @@ interface userMeta extends USER_DATA {
 })
 export class ControlpanelPage {
 
-  uid
+  uid;
   userName;
 
   userData = <userMeta> {};
@@ -30,10 +30,9 @@ export class ControlpanelPage {
       this.checkUser();
   }
   checkUser(){
-    this.user.loggedIn( (userData) => {
+    this.user.loggedIn( ( userData ) => {
       this.uid = userData.uid;
-      this.user.set('key', this.uid).get( user =>{
-        this.userName = user.displayName;
+      this.user.set( 'key', this.uid ).get( user =>{
       }, e=>{})
     }, e => alert('Login : ' + e ) );
 }
