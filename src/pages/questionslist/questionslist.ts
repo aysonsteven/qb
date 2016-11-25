@@ -3,7 +3,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { QuestionformPage } from '../questionform/questionform'
 import { HomePage } from '../home/home';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import * as config from '../shared/shared.config.ts';
+
 
 /*
   Generated class for the Questionslist page.
@@ -18,6 +18,7 @@ import * as config from '../shared/shared.config.ts';
 
 export class QuestionslistPage {
 
+
   loading:boolean = false;
   category:string = 'grammar';
   opt={};
@@ -30,7 +31,6 @@ export class QuestionslistPage {
   url:string = 'http://xbase.esy.es/';
   questions = [];
   constructor(private navCtrl: NavController, private http: Http, private tstCtrl: ToastController) {
-    console.log('checkConfig:: ' + config.serverURL)
     this.loading = true;
     this.getQuestionList();
   }
@@ -61,7 +61,7 @@ export class QuestionslistPage {
   }
 
 
-  http_build_query (formdata, numericPrefix='', argSeparator='') { 
+  http_build_query (formdata, numericPrefix='', argSeparator='') {
         var urlencode = this.urlencode;
         var value
         var key
@@ -95,7 +95,7 @@ export class QuestionslistPage {
         if (!argSeparator) {
             argSeparator = '&'
         }
-        
+
         for (key in formdata) {
             value = formdata[key]
             if (numericPrefix && !isNaN(key)) {

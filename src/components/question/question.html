@@ -1,0 +1,21 @@
+
+  <div *ngFor="let question of questions; let i = index" >
+
+    <ion-item  *ngIf="! more[i]">
+      {{ question.title }}
+      <br/>
+      <button  (click)='more[i] = ! more[i]'>Show more</button>
+      <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+      <button (click)="onClickDelete(question.idx, i)">Delete</button>
+    </ion-item>
+
+    <ion-item text-wrap *ngIf="more[i]">
+      {{ question.title }}
+      <div>Choice1: {{ question.extra_2}}</div>
+      <br/>
+      <button (click)='more[i] = ! more[i]'>Show less</button>
+      <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+      <button (click)="onClickDelete(question.idx, i)">Delete</button>
+    </ion-item>
+  </div>
+

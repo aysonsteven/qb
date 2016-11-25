@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Data } from '../../fireframe2/data';
 
 /*
@@ -42,6 +42,11 @@ export let  picturedescriptionData = {
 })
 export class QuestionformPage {
 
+  body = {};
+
+  headers = new Headers ({'Content-Type':'application/x-www-form-urlencoded'})
+  options = new RequestOptions({headers : this.headers});
+
   postConf = {
     id:'questions',
     name:'questions for quiz app'
@@ -53,14 +58,14 @@ export class QuestionformPage {
   idx:number;
   errorChk;
   option:string;
-  
+
 
   url:string = 'http://xbase.esy.es/';
   grammarPost = grammarData;
   vocabularyPost = vocabularyData;
 
   photo = picturedescriptionData;
-  
+
 
   category: string = 'grammar';
   constructor(
@@ -73,12 +78,12 @@ export class QuestionformPage {
       console.log('this is idx: ' + this.idx + ' : '+  typeof(this.idx))
       this.getQuestion();
       if(this.idx){
-        
+
       }else{
-        
+
       }
       this.createPostConfig();
-      this.onClickReset();      
+      this.onClickReset();
     }
 
   ionViewDidLoad() {
@@ -113,7 +118,7 @@ export class QuestionformPage {
 
   getQuestion(){
     if( this.idx ){
-      
+
       this.http.get( this.url + '?mc=post.get&idx=' + this.idx ).subscribe(res=>{
 
         if( JSON.parse(res['_body']).data.extra_1 == 'grammar' ){
@@ -126,18 +131,27 @@ export class QuestionformPage {
           this.grammarPost.answer = JSON.parse(res['_body']).data.extra_6;
           return;
         }else if ( JSON.parse(res['_body']).data.extra_1 == 'vocabulary' ){
-          this.category = 'vocabulary';
+          this.category = 'vocabulary'
+          this.vocabularyPost.word = JSON.parse(res['_body']).data.title;
+          this.vocabularyPost.choice1 = JSON.parse(res['_body']).data.extra_2;
+          this.vocabularyPost.choice2 = JSON.parse(res['_body']).data.extra_3;
+          this.vocabularyPost.choice3 = JSON.parse(res['_body']).data.extra_4;
+          this.vocabularyPost.choice4 = JSON.parse(res['_body']).data.extra_5;
+          this.vocabularyPost.answer = JSON.parse(res['_body']).data.extra_6;
           console.log('category:: ', this.category )
           return;
           }
           this.category = 'picture';
+          this.photo.description = JSON.parse(res['_body']).data.title;
+          this.urlPhoto = JSON.parse(res['_body']).data.content;
+          this.photo.photoURL = JSON.parse(res['_body']).data.content;
           console.log( 'category:: ', this.category );
         console.log('check getEditData: ' , JSON.parse(res['_body']).data)
       }, e=>{ console.log('error ' , e )})
     }
   }
 
-  
+
 
   validateForm(){
     if( this.category == 'grammar'){
@@ -163,8 +177,68 @@ export class QuestionformPage {
     }
   }
 
+  http_build_query (formdata, numericPrefix='', argSeparator='') {
+    var urlencode = this.urlencode;
+    var value
+    var key
+    var tmp = []
+    var _httpBuildQueryHelper = function (key, val, argSeparator) {
+      var k
+      var tmp = []
+      if (val === true) {
+        val = '1'
+      } else if (val === false) {
+        val = '0'
+      }
+      if (val !== null) {
+        if (typeof val === 'object') {
+          for (k in val) {
+            if (val[k] !== null) {
+              tmp.push(_httpBuildQueryHelper(key + '[' + k + ']', val[k], argSeparator))
+            }
+          }
+          return tmp.join(argSeparator)
+        } else if (typeof val !== 'function') {
+          return urlencode(key) + '=' + urlencode(val)
+        } else {
+          throw new Error('There was an error processing for http_build_query().')
+        }
+      } else {
+        return ''
+      }
+    }
+
+    if (!argSeparator) {
+      argSeparator = '&'
+    }
+
+    for (key in formdata) {
+      value = formdata[key]
+      if (numericPrefix && !isNaN(key)) {
+        key = String(numericPrefix) + key
+      }
+      var query = _httpBuildQueryHelper(key, value, argSeparator)
+      if (query !== '') {
+        tmp.push(query)
+      }
+    }
+
+    return tmp.join(argSeparator)
+  }
+
+  urlencode (str) {
+    str = (str + '')
+    return encodeURIComponent(str)
+      .replace(/!/g, '%21')
+      .replace(/'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/\*/g, '%2A')
+      .replace(/%20/g, '+')
+  }
+
   vocabularyQuestion(){
-    
+
     if ( this.validateForm() == false ) {
       return;
     }
@@ -212,6 +286,7 @@ export class QuestionformPage {
       let ref = 'photo/' + Date.now() + '/' + file.name;
       this.file.upload( { file: file, ref: ref }, uploaded => {
           this.onFileUploaded( uploaded.url, uploaded.ref );
+        console.log('this is the photo' , this.urlPhoto)
       },
       e => {
           this.file_progress = false;
@@ -238,23 +313,23 @@ export class QuestionformPage {
     }
     this.checkIDX();
     this.errorChk = { progress: 'progress'};
-    this.http.request( 
-      this.url 
+    this.http.request(
+      this.url
         + this.option
         + '&extra_1='
         + this.category
-        + '&title=' 
-        + this.grammarPost.question 
-        + '&extra_2=' 
-        + this.grammarPost.choice1 
-        + '&extra_3=' 
-        + this.grammarPost.choice2 
-        + '&extra_4=' 
+        + '&title='
+        + this.grammarPost.question
+        + '&extra_2='
+        + this.grammarPost.choice1
+        + '&extra_3='
+        + this.grammarPost.choice2
+        + '&extra_4='
         + this.grammarPost.choice3
         + '&extra_5='
         + this.grammarPost.choice4
         + '&extra_6='
-        + this.grammarPost.answer  
+        + this.grammarPost.answer
       )
       .subscribe( res=>{
       this.errorChk = { success: 'success' }
@@ -267,20 +342,20 @@ export class QuestionformPage {
 
   photoQuestion(){
 
+    this.body = {
+      'mc': 'post.write',
+      'post_id': 'questions',
+      'extra_1': this.category,
+      'title': this.photo.description,
+      'content': this.urlPhoto,
+      'extra_7': this.photo.photoREF
+    }
+
+
     this.checkIDX();
     this.errorChk = { progress: 'processing' };
-    this.http.request(
-      this.url
-        + this.option
-        + '&extra_1='
-        + this.category
-        + '&title='
-        + this.photo.description
-        + '&content='
-        + this.photo.photoURL
-        + '&extra_7='
-        + this.photo.photoREF
-    ).subscribe( res=>{
+    console.log('check urlPhoto ' , this.urlPhoto)
+    this.http.post(this.url, this.http_build_query(this.body), this.options).subscribe( res=>{
       this.errorChk = { success: 'successfully uploaded' }
       console.log( 'check state: -' + res )
       if( !this.idx ) this.onClickReset();
@@ -305,10 +380,11 @@ export class QuestionformPage {
       this.vocabularyQuestion();
     }else{
       this.photoQuestion();
+      console.log('check this url' , this.urlPhoto )
 
     }
       this.photoQuestion();
-    
+
   }
 
 }

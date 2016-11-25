@@ -6,6 +6,7 @@ import { QuestionformPage } from '../pages/questionform/questionform';
 import { AuthenticationPage } from '../pages/authentication/authentication';
 import { QuestionslistPage } from '../pages/questionslist/questionslist';
 import { ControlpanelPage } from '../pages/controlpanel/controlpanel';
+import { QuestionComponent } from '../components/question/question';
 import { FireModule } from '../fireframe2/fire-module';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { FireModule } from '../fireframe2/fire-module';
     AuthenticationPage,
     QuestionformPage,
     QuestionslistPage,
-    ControlpanelPage
+    ControlpanelPage,
+    QuestionComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -28,7 +30,9 @@ import { FireModule } from '../fireframe2/fire-module';
     AuthenticationPage,
     QuestionformPage,
     QuestionslistPage,
-    ControlpanelPage
+    ControlpanelPage,
+    QuestionComponent
+
   ],
   providers: []
 })

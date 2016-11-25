@@ -33,9 +33,11 @@
   <hr/>
 
   <div [ngSwitch]="category" *ngIf="!loading">
+
+
     <ion-list *ngSwitchCase="'grammar'">
       <div *ngFor="let question of questions; let i = index" >
-        
+
         <ion-item  *ngIf="! more[i]">
           {{ question.title }}
           <br/>
@@ -43,8 +45,8 @@
           <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
           <button (click)="onClickDelete(question.idx, i)">Delete</button>
         </ion-item>
-          
-        <ion-item text-wrap *ngIf="more[i]">   
+
+        <ion-item text-wrap *ngIf="more[i]">
           {{ question.title }}
           <div>Choice1: {{ question.extra_2}}</div>
           <br/>
@@ -52,35 +54,58 @@
           <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
           <button (click)="onClickDelete(question.idx, i)">Delete</button>
         </ion-item>
-        
       </div>
     </ion-list>
+
+
     <ion-list *ngSwitchCase="'vocabulary'">
-        <div *ngFor="let question of questions; let i = index" >
-          
-          <ion-item  *ngIf="! more[i]">
-            {{ question.title }}
-            <br/>
-            <button  (click)='more[i] = ! more[i]'>Show more</button>
-            <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
-            <button (click)="onClickDelete(question.idx, i)">Delete</button>
-          </ion-item>
-            
-          <ion-item text-wrap *ngIf="more[i]">   
-            {{ question.title }}
-            <div>Choice1: {{ question.extra_2}}</div>
-            <br/>
-            <button (click)='more[i] = ! more[i]'>Show less</button>
-            <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
-            <button (click)="onClickDelete(question.idx, i)">Delete</button>
-          </ion-item>
-          
-        </div>
+      <div *ngFor="let question of questions; let i = index" >
+
+        <ion-item  *ngIf="! more[i]">
+          {{ question.title }}
+          <br/>
+          <button  (click)='more[i] = ! more[i]'>Show more</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+
+        <ion-item text-wrap *ngIf="more[i]">
+          {{ question.title }}
+          <div>Choice1: {{ question.extra_2}}</div>
+          <br/>
+          <button (click)='more[i] = ! more[i]'>Show less</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'picture'">
+      <div *ngFor="let question of questions; let i = index" >
+
+        <ion-item  *ngIf="! more[i]">
+          {{ question.title }}
+          <br/>
+          <button  (click)='more[i] = ! more[i]'>Show more</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+
+        <ion-item text-wrap *ngIf="more[i]">
+          {{ question.title }}
+          <div>Image <img src="{{ question.content }}" alt=""></div>
+          <br/>
+          <button (click)='more[i] = ! more[i]'>Show less</button>
+          <button (click)="onClickUpdate(question.idx, i)"> Edit</button>
+          <button (click)="onClickDelete(question.idx, i)">Delete</button>
+        </ion-item>
+
+      </div>
     </ion-list>
   </div>
 
   <div padding *ngIf=" loading"><ion-spinner></ion-spinner>please wait...</div>
-  
+
   <button ion-button (click)="onClickBack()">Back</button>
 
 </ion-content>
