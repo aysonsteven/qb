@@ -3,7 +3,7 @@ import { QuestionformPage } from '../questionform/questionform';
 import { NavController, ToastController } from 'ionic-angular';
 import { QuestionslistPage } from '../questionslist/questionslist';
 import { AuthenticationPage } from '../authentication/authentication';
-import { HomePage } from '../home/home';
+// import { HomePage } from '../home/home';
 import { User, USER_DATA } from '../../fireframe2/user';
 import { UserService } from '../../providers/user-service';
 

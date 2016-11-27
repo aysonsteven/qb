@@ -290,7 +290,7 @@ export class QuestionformPage {
   }
 
   onChangeFile(event) {
-    let reader = new FileReader()
+    // let reader = new FileReader()
       let file = event.target.files[0];
       if ( file === void 0 ) return;
       this.file_progress = true;
