@@ -118,6 +118,31 @@
         <ion-textarea [(ngModel)]='photo.description'></ion-textarea>
       </ion-item>
       <ion-item>
+        <ion-label fixed>Choice1</ion-label>
+        <ion-input [(ngModel)]='photo.choice1'></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Choice2</ion-label>
+        <ion-input [(ngModel)]='photo.choice2'></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Choice3</ion-label>
+        <ion-input [(ngModel)]='photo.choice3'></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Choice4</ion-label>
+        <ion-input [(ngModel)]='photo.choice4'></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Answer</ion-label>
+        <ion-input [(ngModel)]='photo.answer'></ion-input>
+      </ion-item>
+
+      <ion-item>
         <input *ngIf="! cordova" type="file" accept=".jpg" (change)="onChangeFile($event)">
       </ion-item>
         <div *ngIf=" urlPhoto " (click)="onClickPhoto()">

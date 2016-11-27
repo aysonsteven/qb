@@ -149,7 +149,12 @@ export class QuestionformPage {
           this.category = 'picture';
           this.photo.description = JSON.parse(res['_body']).data.title;
           this.urlPhoto = JSON.parse(res['_body']).data.content;
-          this.photo.photoURL = JSON.parse(res['_body']).data.content;
+          this.photo.photoURL = JSON.parse(res['_body'] ).data.content;
+          this.photo.choice1 = JSON.parse( res['_body'] ).data.extra_2;
+          this.photo.choice2 = JSON.parse( res['_body'] ).data.extra_3;
+          this.photo.choice3 = JSON.parse( res['_body'] ).data.extra_4;
+          this.photo.choice4 = JSON.parse( res['_body'] ).data.extra_5;
+          this.photo.answer = JSON.parse( res['_body'] ).data.extra_6
           console.log( 'category:: ', this.category );
         console.log('check getEditData: ' , JSON.parse(res['_body']).data)
       }, e=>{ console.log('error ' , e )})
@@ -285,6 +290,7 @@ export class QuestionformPage {
   }
 
   onChangeFile(event) {
+    let reader = new FileReader()
       let file = event.target.files[0];
       if ( file === void 0 ) return;
       this.file_progress = true;
@@ -351,6 +357,11 @@ export class QuestionformPage {
       'mc': 'post.write',
       'post_id': 'questions',
       'extra_1': this.category,
+      'extra_2': this.photo.choice1,
+      'extra_3': this.photo.choice2,
+      'extra_4': this.photo.choice3,
+      'extra_5': this.photo.choice4,
+      'extra_6': this.photo.answer,
       'title': this.photo.description,
       'content': this.urlPhoto,
       'extra_7': this.photo.photoREF
