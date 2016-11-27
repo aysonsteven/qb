@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ControlpanelPage } from '../controlpanel/controlpanel';
 import { AuthenticationPage } from '../authentication/authentication'
 import { User } from '../../fireframe2/user';
+import { UserService } from '../../providers/user-service';
 
 /*
   Generated class for the Home page.
@@ -18,9 +19,10 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    public user: User
+    public user: User,
+    private userSrvc: UserService
     ) {
-
+      this.checkuserlogged();
     }
 
   ionViewDidLoad() {
@@ -28,6 +30,14 @@ export class HomePage {
         console.log('HomePage::constructor() user.loggedIn() : yes : userData : ', userData);
         this.navCtrl.setRoot( ControlpanelPage );
       }, e => this.navCtrl.setRoot( AuthenticationPage ) );
+  }
+
+  checkuserlogged(){
+    this.userSrvc.logged(s=>{
+      console.log('check session', s)
+    }, ()=>{
+      console.log('not logged in')
+    })
   }
 
 }

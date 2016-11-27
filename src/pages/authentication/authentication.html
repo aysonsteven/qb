@@ -11,11 +11,11 @@
     <ion-list>
         <ion-item>
           <ion-label stacked>Email</ion-label>
-          <ion-input [(ngModel)]="loginUserMail" (focus)="clearError()"></ion-input>
+          <ion-input [(ngModel)]="loginfrm.id" (focus)="clearError()"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>Password</ion-label>
-          <ion-input [(ngModel)]="loginUserPass"></ion-input>
+          <ion-input [(ngModel)]="loginfrm.password"></ion-input>
         </ion-item>
       </ion-list>
   <div progress *ngIf=" errorChk?.progress "><ion-spinner></ion-spinner>{{ errorChk.progress }}</div>
