@@ -30,10 +30,15 @@ let vocabularyData = {
     choice4: '',
     answer: ''
 }
-export let  picturedescriptionData = {
+let  picturedescriptionData = {
   photoURL: '',
   description:'',
-  photoREF:''
+  photoREF:'',
+  choice1: '',
+  choice2: '',
+  choice3: '',
+  choice4: '',
+  answer: ''
 }
 
 @Component({

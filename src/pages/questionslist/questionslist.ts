@@ -28,7 +28,7 @@ export class QuestionslistPage {
   more = [];
   headers = new Headers ({'Content-Type':'application/x-www-form-urlencoded'})
   options = new RequestOptions({headers : this.headers});
-  url:string = 'http://xbase.esy.es/';
+  url:string = 'http://xbase.esy.es/index.php';
   questions = [];
   constructor(private navCtrl: NavController, private http: Http, private tstCtrl: ToastController) {
     this.loading = true;
@@ -143,7 +143,11 @@ export class QuestionslistPage {
   }
 
   onClickDelete(id, index){
-    this.http.get( this.url + '?mc=post.delete&idx=' + id).subscribe( s=>{
+    this.opt = {
+      'mc': 'post.delete',
+      'idx': id
+    }
+    this.http.post( this.url , this.http_build_query(this.opt) , this.options).subscribe( s=>{
       console.log('ok: ' + s);
       this.createToast('Successfully deleted', 2500);
       this.questions.splice(index, 1);

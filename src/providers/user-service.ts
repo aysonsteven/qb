@@ -45,7 +45,12 @@ export class UserService {
     if ( session_id ) yesCallback( session_id );
     else noCallback();
   }
-
+  logout( successCallback: (session_id:string ) =>void,  noCallback?: () => void ){
+    if( localStorage.getItem( XBASE_SESSION_ID ) ){
+      localStorage.removeItem( XBASE_SESSION_ID );
+      successCallback('logged out successfully');
+    }else noCallback();
+  }
 
   query( data : any, successCallback : any, errorCallback  : any ) {
     let body = this.buildQuery( data );

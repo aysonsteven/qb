@@ -124,7 +124,7 @@
           <img [src]="urlPhoto">
           {{ picturedescriptionData?.photoURL }}
         </div>
-        <div *ngIf=" picturedescriptionData?.photoURL ">
+        <div *ngIf=" photo.photoURL ">
           <button ion-button (click)="onClickDeletePhoto( picturedescriptionData.photoREF )">DELETE</button>
         </div>
         

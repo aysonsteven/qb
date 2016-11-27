@@ -26,17 +26,19 @@ export class HomePage {
     }
 
   ionViewDidLoad() {
-      this.user.loggedIn( (userData) => {
-        console.log('HomePage::constructor() user.loggedIn() : yes : userData : ', userData);
-        this.navCtrl.setRoot( ControlpanelPage );
-      }, e => this.navCtrl.setRoot( AuthenticationPage ) );
+      // this.user.loggedIn( (userData) => {
+      //   console.log('HomePage::constructor() user.loggedIn() : yes : userData : ', userData);
+      //   this.navCtrl.setRoot( ControlpanelPage );
+      // }, e => this.navCtrl.setRoot( AuthenticationPage ) );
   }
 
   checkuserlogged(){
     this.userSrvc.logged(s=>{
       console.log('check session', s)
+      this.navCtrl.setRoot ( ControlpanelPage );
     }, ()=>{
       console.log('not logged in')
+      this.navCtrl.setRoot( AuthenticationPage );
     })
   }
 
