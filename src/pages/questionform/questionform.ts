@@ -122,9 +122,13 @@ export class QuestionformPage {
   }
 
   getQuestion(){
+    this.body = {
+      'mc': 'post.get',
+      'idx': this.idx
+    }
     if( this.idx ){
 
-      this.http.get( this.url + '?mc=post.get&idx=' + this.idx ).subscribe(res=>{
+      this.http.post( this.url , this.http_build_query( this.body ) , this.options ).subscribe( res=>{
 
         if( JSON.parse(res['_body']).data.extra_1 == 'grammar' ){
 
@@ -174,13 +178,16 @@ export class QuestionformPage {
         this.errorChk = { error: 'error' }
         return false;
       }
+      if( this.photo.description == ''){
+        this.errorChk = { error: 'error'}
+        return false;
+      }
     }
-
   }
 
   checkIDX(){
     if( ! this.idx ){
-      this.option = '?mc=post.write&post_id=questions' ;
+      this.option = '?mc=post.write' ;
       return;
     }else{
       this.option = '?mc=post.edit&idx='+ this.idx +'&post_id=questions';
@@ -247,31 +254,39 @@ export class QuestionformPage {
       .replace(/%20/g, '+')
   }
 
-  vocabularyQuestion(){
+  checkCreateUpdateVoca(){
+    if( ! this.idx ){
+      this.body ={
+        'mc': 'post.write',
+        'post_id': 'questions',
+        'extra_1': this.category,
+        'title': this.vocabularyPost.word,
+        'extra_2': this.vocabularyPost.choice1,
+        'extra_3': this.vocabularyPost.choice2,
+        'extra_4': this.vocabularyPost.choice3,
+        'extra_5': this.vocabularyPost.choice4,
+        'extra_6': this.vocabularyPost.answer
+      }
+    }else{
+      this.body ={
+        'mc': 'post.edit',
+        'idx': this.idx,
+        'post_id': 'questions',
+        'extra_1': this.category,
+        'title': this.vocabularyPost.word,
+        'extra_2': this.vocabularyPost.choice1,
+        'extra_3': this.vocabularyPost.choice2,
+        'extra_4': this.vocabularyPost.choice3,
+        'extra_5': this.vocabularyPost.choice4,
+        'extra_6': this.vocabularyPost.answer
+      }
+    }  
+  }
 
-    if ( this.validateForm() == false ) {
-      return;
-    }
-    this.checkIDX();
+  vocabularyQuestion(){
+    this.checkCreateUpdateVoca();
     this.errorChk = { progress: 'progress'};
-    this.http.request(
-      this.url
-      + this.option
-      + '&extra_1='
-      + this.category
-      + '&title='
-      + this.vocabularyPost.word
-      + '&extra_2='
-      + this.vocabularyPost.choice1
-      + '&extra_3='
-      + this.vocabularyPost.choice2
-      + '&extra_4='
-      + this.vocabularyPost.choice3
-      + '&extra_5='
-      + this.vocabularyPost.choice4
-      + '&extra_6='
-      + this.vocabularyPost.answer
-      )
+    this.http.post( this.url, this.http_build_query( this.body ), this.options )
       .subscribe( res=>{
       this.errorChk = { success: 'success' }
       console.log( 'successfully added: ' + res );
@@ -282,30 +297,29 @@ export class QuestionformPage {
   }
 
 
-    onFileUploaded( url, ref ) {
-      this.file_progress = false;
-      this.urlPhoto = url;
-      this.photo.photoURL = url;
-      this.photo.photoREF = ref;
-  }
-
+  onFileUploaded( url, ref ) {
+    this.file_progress = false;
+    this.urlPhoto = url;
+    this.photo.photoURL = url;
+    this.photo.photoREF = ref;
+}
   onChangeFile(event) {
-    // let reader = new FileReader()
-      let file = event.target.files[0];
-      if ( file === void 0 ) return;
-      this.file_progress = true;
-      let ref = 'photo/' + Date.now() + '/' + file.name;
-      this.file.upload( { file: file, ref: ref }, uploaded => {
-          this.onFileUploaded( uploaded.url, uploaded.ref );
-        console.log('this is the photo' , this.urlPhoto)
-      },
-      e => {
-          this.file_progress = false;
-          alert(e);
-      },
-      percent => {
-          this.position = percent;
-      } );
+  // let reader = new FileReader()
+    let file = event.target.files[0];
+    if ( file === void 0 ) return;
+    this.file_progress = true;
+    let ref = 'photo/' + Date.now() + '/' + file.name;
+    this.file.upload( { file: file, ref: ref }, uploaded => {
+        this.onFileUploaded( uploaded.url, uploaded.ref );
+      console.log('this is the photo' , this.urlPhoto)
+    },
+    e => {
+        this.file_progress = false;
+        alert(e);
+    },
+    percent => {
+        this.position = percent;
+    } );
   }
   onClickDeletePhoto( ref ) {
       this.file.delete( ref, () => {
@@ -317,31 +331,41 @@ export class QuestionformPage {
       } );
   }
 
-
+  checkGrammarQuestion(){
+    if( ! this.idx ){
+      this.body ={
+        'mc': 'post.write',
+        'post_id': 'questions',
+        'extra_1': this.category,
+        'title': this.grammarPost.question,
+        'extra_2': this.grammarPost.choice1,
+        'extra_3': this.grammarPost.choice2,
+        'extra_4': this.grammarPost.choice3,
+        'extra_5': this.grammarPost.choice4,
+        'extra_6': this.grammarPost.answer
+      }
+    }else{
+      this.body ={
+        'mc': 'post.edit',
+        'idx': this.idx,
+        'post_id': 'questions',
+        'extra_1': this.category,
+        'title': this.grammarPost.question,
+        'extra_2': this.grammarPost.choice1,
+        'extra_3': this.grammarPost.choice2,
+        'extra_4': this.grammarPost.choice3,
+        'extra_5': this.grammarPost.choice4,
+        'extra_6': this.grammarPost.answer
+      }
+    }  
+  }
   grammarQuestion(){
     if ( this.validateForm() == false ) {
       return;
     }
-    this.checkIDX();
+    this.checkGrammarQuestion();
     this.errorChk = { progress: 'progress'};
-    this.http.request(
-      this.url
-        + this.option
-        + '&extra_1='
-        + this.category
-        + '&title='
-        + this.grammarPost.question
-        + '&extra_2='
-        + this.grammarPost.choice1
-        + '&extra_3='
-        + this.grammarPost.choice2
-        + '&extra_4='
-        + this.grammarPost.choice3
-        + '&extra_5='
-        + this.grammarPost.choice4
-        + '&extra_6='
-        + this.grammarPost.answer
-      )
+    this.http.post( this.url, this.http_build_query( this.body ), this.options )
       .subscribe( res=>{
       this.errorChk = { success: 'success' }
       console.log( 'successfully added: ' + res );

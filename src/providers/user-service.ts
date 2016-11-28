@@ -35,7 +35,7 @@ export class UserService {
       data['mc'] = 'user.login';
       this.query( data, (session_id : any )=> {
           localStorage.setItem( XBASE_SESSION_ID , session_id );
-          successCallback( session_id );
+          successCallback( 'logged in( session_id ): '+ session_id );
       }, errorCallback );
   }
 

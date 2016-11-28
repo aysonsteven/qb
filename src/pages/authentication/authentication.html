@@ -10,17 +10,21 @@
 <h3>Login</h3>
     <ion-list>
         <ion-item>
-          <ion-label stacked>Email</ion-label>
+          <ion-label stacked>Id</ion-label>
           <ion-input [(ngModel)]="loginfrm.id" (focus)="clearError()"></ion-input>
         </ion-item>
         <ion-item>
+          <div error *ngIf="errorChk?.errorID "><ion-icon name="bug"></ion-icon>{{ errorChk.errorID }}</div>
+        </ion-item>
+        <ion-item>
           <ion-label stacked>Password</ion-label>
-          <ion-input [(ngModel)]="loginfrm.password"></ion-input>
+          <ion-input [(ngModel)]="loginfrm.password" (focus)="clearError()"></ion-input>
         </ion-item>
       </ion-list>
   <div progress *ngIf=" errorChk?.progress "><ion-spinner></ion-spinner>{{ errorChk.progress }}</div>
   <div success *ngIf=" errorChk?.success "><ion-icon name="checkmark"></ion-icon>{{ errorChk.success }}</div>
   <div error *ngIf=" errorChk?.error "><ion-icon name="bug"></ion-icon>{{ errorChk.error }}</div>
+  <div error *ngIf=" errorChk?.errorPword "><ion-icon name="bug"></ion-icon>{{ errorChk.errorPword }}</div>
   <button ion-button small (click)="onClickLogin()">Login</button>
 
 </ion-content>
