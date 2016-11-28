@@ -103,7 +103,12 @@ export class QuestionformPage {
   }
 
   createPostConfig(){
-    this.http.request( this.url + '?mc=post_config.create&id=' + this.postConf.id + '&name=' + this.postConf.name ).subscribe( s=>{
+    this.body = {
+      'mc': 'post_config.create',
+      'id': this.postConf.id,
+      'name': this.postConf.name
+    }
+    this.http.post( this.url , this.http_build_query( this.body ) , this.options ).subscribe( s=>{
       console.log( 'this :::: ()' + s )
     })
   }
