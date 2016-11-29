@@ -15,7 +15,7 @@ export class QuizService {
 
   session_id = 'xbase-session-id';
 
-  url:string = 'http://www.quizxbase.esy.es/index.php'
+  url:string = 'http://xbase.esy.es/index.php'
 
   constructor(public http: Http) {
     console.log('Hello QuizService Provider');
