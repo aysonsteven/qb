@@ -71,7 +71,6 @@ export class QuizService {
   }
 
   post( data : any, successCallback , errorCallback: (error:string) => void ){
-    data['mc'] = 'post.write';
     this.query( data, successCallback=>{
       console.log( successCallback )
     },errorCallback=>{
