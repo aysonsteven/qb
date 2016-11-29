@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
+import { QuizService } from '../../providers/quiz-service';
+
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Data } from '../../fireframe2/data';
 
@@ -77,6 +79,7 @@ export class QuestionformPage {
     private navCtrl: NavController,
     private http: Http,
     private navPar: NavParams,
+    private quizSrvc: QuizService,
     private file: Data
     ) {
       this.idx = parseInt(this.navPar.get('id'));
@@ -108,8 +111,10 @@ export class QuestionformPage {
       'id': this.postConf.id,
       'name': this.postConf.name
     }
-    this.http.post( this.url , this.http_build_query( this.body ) , this.options ).subscribe( s=>{
-      console.log( 'this :::: ()' + s )
+    this.quizSrvc.query( this.body , res=>{
+      console.log('created', res)
+    }, e=>{
+      console.log( e );
     })
   }
 
@@ -133,37 +138,37 @@ export class QuestionformPage {
     }
     if( this.idx ){
 
-      this.http.post( this.url , this.http_build_query( this.body ) , this.options ).subscribe( res=>{
-
+      this.quizSrvc.query( this.body,  res=>{
+      let data = JSON.parse( res['_body']).data;
         if( JSON.parse(res['_body']).data.extra_1 == 'grammar' ){
 
-          this.grammarPost.question = JSON.parse(res['_body']).data.title;
-          this.grammarPost.choice1 = JSON.parse(res['_body']).data.extra_2;
-          this.grammarPost.choice2 = JSON.parse(res['_body']).data.extra_3;
-          this.grammarPost.choice3 = JSON.parse(res['_body']).data.extra_4;
-          this.grammarPost.choice4 = JSON.parse(res['_body']).data.extra_5;
-          this.grammarPost.answer = JSON.parse(res['_body']).data.extra_6;
+          this.grammarPost.question = data.title;
+          this.grammarPost.choice1 = data.extra_2;
+          this.grammarPost.choice2 = data.extra_3;
+          this.grammarPost.choice3 = data.extra_4;
+          this.grammarPost.choice4 = data.extra_5;
+          this.grammarPost.answer = data.extra_6;
           return;
         }else if ( JSON.parse(res['_body']).data.extra_1 == 'vocabulary' ){
           this.category = 'vocabulary'
-          this.vocabularyPost.word = JSON.parse(res['_body']).data.title;
-          this.vocabularyPost.choice1 = JSON.parse(res['_body']).data.extra_2;
-          this.vocabularyPost.choice2 = JSON.parse(res['_body']).data.extra_3;
-          this.vocabularyPost.choice3 = JSON.parse(res['_body']).data.extra_4;
-          this.vocabularyPost.choice4 = JSON.parse(res['_body']).data.extra_5;
-          this.vocabularyPost.answer = JSON.parse(res['_body']).data.extra_6;
+          this.vocabularyPost.word = data.title;
+          this.vocabularyPost.choice1 = data.extra_2;
+          this.vocabularyPost.choice2 = data.extra_3;
+          this.vocabularyPost.choice3 = data.extra_4;
+          this.vocabularyPost.choice4 = data.extra_5;
+          this.vocabularyPost.answer = data.extra_6;
           console.log('category:: ', this.category )
           return;
           }
           this.category = 'picture';
-          this.photo.description = JSON.parse(res['_body']).data.title;
-          this.urlPhoto = JSON.parse(res['_body']).data.content;
-          this.photo.photoURL = JSON.parse(res['_body'] ).data.content;
-          this.photo.choice1 = JSON.parse( res['_body'] ).data.extra_2;
-          this.photo.choice2 = JSON.parse( res['_body'] ).data.extra_3;
-          this.photo.choice3 = JSON.parse( res['_body'] ).data.extra_4;
-          this.photo.choice4 = JSON.parse( res['_body'] ).data.extra_5;
-          this.photo.answer = JSON.parse( res['_body'] ).data.extra_6
+          this.photo.description = data.title;
+          this.urlPhoto = data.content;
+          this.photo.photoURL = data.content;
+          this.photo.choice1 = data.extra_2;
+          this.photo.choice2 = data.extra_3;
+          this.photo.choice3 = data.extra_4;
+          this.photo.choice4 = data.extra_5;
+          this.photo.answer = data.extra_6
           console.log( 'category:: ', this.category );
         console.log('check getEditData: ' , JSON.parse(res['_body']).data)
       }, e=>{ console.log('error ' , e )})
@@ -272,7 +277,8 @@ export class QuestionformPage {
         'extra_5': this.vocabularyPost.choice4,
         'extra_6': this.vocabularyPost.answer
       }
-    }else{
+      return;
+    }
       this.body ={
         'mc': 'post.edit',
         'idx': this.idx,
@@ -284,15 +290,14 @@ export class QuestionformPage {
         'extra_4': this.vocabularyPost.choice3,
         'extra_5': this.vocabularyPost.choice4,
         'extra_6': this.vocabularyPost.answer
-      }
+      
     }  
   }
 
   vocabularyQuestion(){
     this.checkCreateUpdateVoca();
     this.errorChk = { progress: 'progress'};
-    this.http.post( this.url, this.http_build_query( this.body ), this.options )
-      .subscribe( res=>{
+    this.quizSrvc.post( this.body, res=>{
       this.errorChk = { success: 'success' }
       console.log( 'successfully added: ' + res );
       if( !this.idx ) this.onClickReset();
@@ -349,7 +354,8 @@ export class QuestionformPage {
         'extra_5': this.grammarPost.choice4,
         'extra_6': this.grammarPost.answer
       }
-    }else{
+      return;
+    }
       this.body ={
         'mc': 'post.edit',
         'idx': this.idx,
@@ -361,7 +367,7 @@ export class QuestionformPage {
         'extra_4': this.grammarPost.choice3,
         'extra_5': this.grammarPost.choice4,
         'extra_6': this.grammarPost.answer
-      }
+      
     }  
   }
   grammarQuestion(){
@@ -370,8 +376,7 @@ export class QuestionformPage {
     }
     this.checkGrammarQuestion();
     this.errorChk = { progress: 'progress'};
-    this.http.post( this.url, this.http_build_query( this.body ), this.options )
-      .subscribe( res=>{
+    this.quizSrvc.post( this.url , res=>{
       this.errorChk = { success: 'success' }
       console.log( 'successfully added: ' + res );
       if( !this.idx ) this.onClickReset();
@@ -400,7 +405,7 @@ export class QuestionformPage {
     this.checkIDX();
     this.errorChk = { progress: 'processing' };
     console.log('check urlPhoto ' , this.urlPhoto)
-    this.http.post(this.url, this.http_build_query(this.body), this.options).subscribe( res=>{
+    this.quizSrvc.post( this.body, res=>{
       this.errorChk = { success: 'successfully uploaded' }
       console.log( 'check state: -' + res )
       if( !this.idx ) this.onClickReset();

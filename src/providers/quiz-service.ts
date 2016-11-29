@@ -11,14 +11,14 @@ const XBASE_SESSION_ID = 'xbase-session-id';
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class UserService {
+export class QuizService {
 
   session_id = 'xbase-session-id';
 
   url:string = 'http://www.quizxbase.esy.es/index.php'
 
   constructor(public http: Http) {
-    console.log('Hello UserService Provider');
+    console.log('Hello QuizService Provider');
   }
 
   get requestOptions() : RequestOptions {
@@ -68,6 +68,15 @@ export class UserService {
               errorCallback(data['_body']);
           }
       });
+  }
+
+  post( data : any, successCallback , errorCallback: (error:string) => void ){
+    data['mc'] = 'post.write';
+    this.query( data, successCallback=>{
+      console.log( successCallback )
+    },errorCallback=>{
+      console.log( errorCallback )
+    })
   }
 
 

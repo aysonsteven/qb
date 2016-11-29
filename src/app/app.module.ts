@@ -9,6 +9,7 @@ import { ControlpanelPage } from '../pages/controlpanel/controlpanel';
 import { QuestionComponent } from '../components/question/question';
 import { FireModule } from '../fireframe2/fire-module';
 import { UserService } from '../providers/user-service';
+import { QuizService } from '../providers/quiz-service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,6 @@ import { UserService } from '../providers/user-service';
     QuestionComponent
 
   ],
-  providers: [ UserService ]
+  providers: [ UserService, QuizService ]
 })
 export class AppModule {}
