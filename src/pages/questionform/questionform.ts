@@ -205,9 +205,6 @@ export class QuestionformPage {
   }
 
 
-
-
-
   checkCreateUpdateVoca(){
     if( ! this.idx ){
       this.body ={
